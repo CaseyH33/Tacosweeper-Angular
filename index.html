@@ -5,13 +5,15 @@
     <script src="lib/angular.js"></script>
     <script src="app.js"></script>
     <script src="controllers/TacosweeperController.js"></script>
+    <link rel="stylesheet" href="css/styles.css">
   </head>
   <body>
     <div ng-controller="TacosweeperCtrl">
-    <table border="1">
+    <table border="1" class="tacofield">
       <tr ng-repeat="row in tacofield.rows">
-        <td ng-repeat="spot in row.spots">
-          {{ spot.isCovered }}
+        <td ng-repeat="spot in row.spots" ng-click="spot.isCovered = false">
+          <img ng-if="spot.isCovered" src="css/images/covered.png">
+          <img ng-if="!spot.isCovered" src="css/images/empty.png">
         </td>
       </tr>
     </table>
