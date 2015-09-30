@@ -5,7 +5,16 @@ tacosweeper.controller('TacosweeperCtrl', function TacosweeperCtrl($scope) {
     if(hasWon($scope.tacofield)) {
       $scope.isWinMessageVisible = true;
       alert("You are a winner!");
-    }
+    } else if(spot.content == "bomb") {
+        for(var y = 0; y < 9; y++ ) {
+          for(var x = 0; x < 9; x++) {
+            if($scope.tacofield.rows[y].spots[x].content == "bomb") {
+              $scope.tacofield.rows[y].spots[x].isCovered = false;
+            }
+          }
+        }
+        alert("You've lost!");
+    };
   };
 
   function createTacofield() {
