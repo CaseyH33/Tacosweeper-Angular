@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html ng-app="tacosweeper">
+  <head>
+    <title>Tacosweeper</title>
+    <script src="lib/angular.js"></script>
+    <script src="app.js"></script>
+    <script src="controllers/TacosweeperController.js"></script>
+  </head>
+  <body>
+    <div ng-controller="TacosweeperCtrl">
+    <table border="1">
+      <tr ng-repeat="row in tacofield.rows">
+        <td ng-repeat="spot in row.spots">
+          {{ spot.isCovered }}
+        </td>
+      </tr>
+    </table>
+  </div>
+  </body>
+</html>
