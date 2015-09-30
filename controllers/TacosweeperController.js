@@ -1,5 +1,12 @@
 tacosweeper.controller('TacosweeperCtrl', function TacosweeperCtrl($scope) {
   $scope.tacofield = createTacofield();
+  $scope.uncoverSpot = function(spot) {
+    spot.isCovered = false;
+    if(hasWon($scope.tacofield)) {
+      $scope.isWinMessageVisible = true;
+      alert("You are a winner!");
+    }
+  };
 
   function createTacofield() {
     var tacofield= {};
@@ -81,6 +88,14 @@ tacosweeper.controller('TacosweeperCtrl', function TacosweeperCtrl($scope) {
 
     }
     // check column to the left if this is no the first column
+    if(column > 0) {
+        // get the spot to the left
+        var spot = getSpot(tacofield, row, column - 1);
+        if(spot.content == "bomb") {
+            bombCount++;
+        }
+    }
+
     if (column < 8 ) {
       // get the spot to the right
       var spot = getSpot(tacofield, row, column +1);
@@ -115,16 +130,28 @@ tacosweeper.controller('TacosweeperCtrl', function TacosweeperCtrl($scope) {
       }
     }
 
-  if (bombCount > 0 ) {
-    thisSpot.content = bombCount;
-  }
-  }
+    if (bombCount > 0 ) {
+      thisSpot.content = bombCount;
+    }
+  };
 
   function calculateAllNumbers(tacofield) {
-    for (var y = 0; y < 9; y++ ) {
+    for(var y = 0; y < 9; y++ ) {
         for(var x = 0; x < 9; x++) {
             calculateNumber(tacofield, x, y);
         }
     }
-  }
+  };
+
+  function hasWon(tacofield) {
+    for(var y = 0; y < 9; y++ ) {
+      for(var x = 0; x < 9; x++) {
+        var spot = getSpot(tacofield, y, x);
+        if(spot.isCovered && spot.content !="bomb") {
+          return false;
+        }
+      }
+    }
+    return true;
+  };
 });
