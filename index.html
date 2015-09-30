@@ -13,7 +13,8 @@
       <tr ng-repeat="row in tacofield.rows">
         <td ng-repeat="spot in row.spots" ng-click="spot.isCovered = false">
           <img ng-if="spot.isCovered" src="css/images/covered.png">
-          <img ng-if="!spot.isCovered" src="css/images/empty.png">
+          <img ng-if="!spot.isCovered  && spot.content == 'empty' " src="css/images/empty.png">
+          <img class="bomb" ng-if="!spot.isCovered && spot.content == 'bomb' " src="css/images/trump.jpg">
         </td>
       </tr>
     </table>
