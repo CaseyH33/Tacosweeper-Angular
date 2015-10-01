@@ -13,7 +13,6 @@
     <div ng-controller="TacosweeperCtrl">
       <h3 ng-if="isWinMessageVisible">You Won!</h3>
       <h3 ng-if="isLostMessageVisible">You've Lost!</h3>
-      <button class="btn btn-primary" ng-click="newGame()">Start New Game</button>
       <table border="1" class="tacofield">
         <tr ng-repeat="row in tacofield.rows">
           <td ng-repeat="spot in row.spots" ng-click="uncoverSpot(spot)" ng-right-click="flag(spot)">
@@ -32,6 +31,17 @@
           </td>
         </tr>
       </table>
+      <form ng-submit="newGame()"role="form">
+        <div class="form-group">
+          <h4>Number of Rows:</h4>
+          <input type="number" ng-model="rowNum" class="form-inline" placeholder="9" required>
+        </div>
+        <div class="form-group">
+          <h4>Number of Bombs:</h4>
+          <input type="number" ng-model="bombNum" class="form-inline" placeholder="10" required>
+        </div>
+        <button class="btn btn-primary" type="submit">Start New Game</button>
+      </form>
   </div>
   </body>
 </html>

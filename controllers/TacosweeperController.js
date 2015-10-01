@@ -1,4 +1,6 @@
 tacosweeper.controller('TacosweeperCtrl', function TacosweeperCtrl($scope) {
+  $scope.rowNum = 9;
+  $scope.bombNum = 10;
   $scope.tacofield = createTacofield();
   $scope.emptySpots = [];
 
@@ -6,11 +8,10 @@ tacosweeper.controller('TacosweeperCtrl', function TacosweeperCtrl($scope) {
     spot.isCovered = false;
     if(hasWon($scope.tacofield)) {
       $scope.isWinMessageVisible = true;
-      alert("You are a winner!");
     } else if(spot.content == "bomb") {
       //If revealed spot is a bomb, reveal all other bombs
-        for(var y = 0; y < 9; y++ ) {
-          for(var x = 0; x < 9; x++) {
+        for(var y = 0; y < $scope.rowNum; y++ ) {
+          for(var x = 0; x < $scope.rowNum; x++) {
             if($scope.tacofield.rows[y].spots[x].content == "bomb") {
               $scope.tacofield.rows[y].spots[x].isCovered = false;
             }
@@ -63,11 +64,11 @@ tacosweeper.controller('TacosweeperCtrl', function TacosweeperCtrl($scope) {
     tacofield.rows = [];
 
     //Add ability to change board size
-    for(var i=0; i<9; i++) {
+    for(var i=0; i<$scope.rowNum; i++) {
       var row = {};
       row.spots = [];
 
-      for(var j=0; j<9; j++) {
+      for(var j=0; j<$scope.rowNum; j++) {
         var spot = {};
         spot.isCovered = true;
         spot.content = "empty";
@@ -79,7 +80,7 @@ tacosweeper.controller('TacosweeperCtrl', function TacosweeperCtrl($scope) {
       tacofield.rows.push(row);
     }
 
-    placeManyRandomBombs(tacofield, 10);
+    placeManyRandomBombs(tacofield);
     calculateAllNumbers(tacofield);
     return tacofield;
   };
@@ -91,8 +92,8 @@ tacosweeper.controller('TacosweeperCtrl', function TacosweeperCtrl($scope) {
 
 //Place a bomb in a random spot that doesn't already have a bomb
   function placeRandomBomb(tacofield) {
-    var row = Math.round(Math.random() * 8);
-    var column = Math.round(Math.random() * 8);
+    var row = Math.round(Math.random() * ($scope.rowNum -1));
+    var column = Math.round(Math.random() * ($scope.rowNum -1));
     var spot = getSpot(tacofield, row, column);
     if(spot.content== 'bomb') {
       placeRandomBomb(tacofield)
@@ -102,8 +103,8 @@ tacosweeper.controller('TacosweeperCtrl', function TacosweeperCtrl($scope) {
   };
 
 //Place bombNum number of bombs
-  function placeManyRandomBombs(tacofield, bombNum) {
-    for(var i =0; i<bombNum; i++) {
+  function placeManyRandomBombs(tacofield) {
+    for(var i =0; i<$scope.bombNum; i++) {
       placeRandomBomb(tacofield);
     };
   };
@@ -127,7 +128,7 @@ tacosweeper.controller('TacosweeperCtrl', function TacosweeperCtrl($scope) {
         surroundingSpots.push(getSpot(tacofield, row -1, column));
 
         //check column to the right if this is not the last column
-        if(column < 8) {
+        if(column < ($scope.rowNum -1)) {
           //get the spot above and to the right
           surroundingSpots.push(getSpot(tacofield, row - 1, column + 1));
         }
@@ -140,13 +141,13 @@ tacosweeper.controller('TacosweeperCtrl', function TacosweeperCtrl($scope) {
           surroundingSpots.push(getSpot(tacofield, row, column - 1));
       }
 
-      if (column < 8 ) {
+      if (column < ($scope.rowNum -1) ) {
         // get the spot to the right
         surroundingSpots.push(getSpot(tacofield, row, column +1));
       }
 
       // check row below if it is not the last row
-      if (row < 8 ) {
+      if (row < ($scope.rowNum -1) ) {
        // check column to the left if this is not the first column
         if (column > 0) {
           // get the spot to the left
@@ -157,7 +158,7 @@ tacosweeper.controller('TacosweeperCtrl', function TacosweeperCtrl($scope) {
        surroundingSpots.push(getSpot(tacofield, row +1, column));
 
        // check column to the right if it is not the last column
-       if (column < 8 ) {
+       if (column < ($scope.rowNum -1) ) {
        // get the spot below and to the right
         surroundingSpots.push(getSpot(tacofield, row +1, column +1));
         }
@@ -195,7 +196,7 @@ tacosweeper.controller('TacosweeperCtrl', function TacosweeperCtrl($scope) {
       }
 
       //check column to the right if this is not the last column
-      if(column < 8) {
+      if(column < ($scope.rowNum -1)) {
         //get the spot above and to the right
         var spot = getSpot(tacofield, row - 1, column + 1);
         if(spot.content == "bomb") {
@@ -213,7 +214,7 @@ tacosweeper.controller('TacosweeperCtrl', function TacosweeperCtrl($scope) {
         }
     }
 
-    if (column < 8 ) {
+    if (column < ($scope.rowNum -1) ) {
       // get the spot to the right
       var spot = getSpot(tacofield, row, column +1);
       if (spot.content =="bomb") {
@@ -222,7 +223,7 @@ tacosweeper.controller('TacosweeperCtrl', function TacosweeperCtrl($scope) {
   }
 
     // check row below if it is not the last row
-    if (row < 8 ) {
+    if (row < ($scope.rowNum -1) ) {
      // check column to the left if this is not the first column
       if (column > 0) {
         // get the spot to the left
@@ -238,7 +239,7 @@ tacosweeper.controller('TacosweeperCtrl', function TacosweeperCtrl($scope) {
       }
 
      // check column to the right if it is not the last column
-     if (column < 8 ) {
+     if (column < ($scope.rowNum -1) ) {
      // get the spot below and to the right
        var spot = getSpot(tacofield, row +1, column +1);
        if (spot.content =="bomb") {
@@ -253,16 +254,16 @@ tacosweeper.controller('TacosweeperCtrl', function TacosweeperCtrl($scope) {
   };
 
   function calculateAllNumbers(tacofield) {
-    for(var y = 0; y < 9; y++ ) {
-        for(var x = 0; x < 9; x++) {
+    for(var y = 0; y < $scope.rowNum; y++ ) {
+        for(var x = 0; x < $scope.rowNum; x++) {
             calculateNumber(tacofield, x, y);
         }
     }
   };
 
   function hasWon(tacofield) {
-    for(var y = 0; y < 9; y++ ) {
-      for(var x = 0; x < 9; x++) {
+    for(var y = 0; y < $scope.rowNum; y++ ) {
+      for(var x = 0; x < $scope.rowNum; x++) {
         var spot = getSpot(tacofield, y, x);
         if(spot.isCovered && spot.content !="bomb") {
           return false;
