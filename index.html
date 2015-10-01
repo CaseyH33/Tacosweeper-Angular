@@ -17,18 +17,18 @@
       <table border="1" class="tacofield">
         <tr ng-repeat="row in tacofield.rows">
           <td ng-repeat="spot in row.spots" ng-click="uncoverSpot(spot)" ng-right-click="flag(spot)">
-            <img class="taco" ng-if="spot.isFlagged && spot.isCovered" src="css/images/taco-art.png">
-            <img ng-if="spot.isCovered && !spot.isFlagged" src="css/images/covered.png">
-            <img ng-if="!spot.isCovered  && spot.content == 'empty' " src="css/images/empty.png">
-            <img class="bomb" ng-if="!spot.isCovered && spot.content == 'bomb' " src="css/images/trump.jpg">
-            <img ng-if="!spot.isCovered && spot.content == 1" src="css/images/number-1.png">
-            <img ng-if="!spot.isCovered && spot.content == 2" src="css/images/number-2.png">
-            <img ng-if="!spot.isCovered && spot.content == 3" src="css/images/number-3.png">
-            <img ng-if="!spot.isCovered && spot.content == 4" src="css/images/number-4.png">
-            <img ng-if="!spot.isCovered && spot.content == 5" src="css/images/number-5.png">
-            <img ng-if="!spot.isCovered && spot.content == 6" src="css/images/number-6.png">
-            <img ng-if="!spot.isCovered && spot.content == 7" src="css/images/number-7.png">
-            <img ng-if="!spot.isCovered && spot.content == 8" src="css/images/number-8.png">
+            <img class="square" ng-if="spot.isFlagged && spot.isCovered" src="css/images/taco.png">
+            <img class="square" ng-if="spot.isCovered && !spot.isFlagged" src="css/images/covered.png">
+            <img class="square" ng-if="!spot.isCovered  && spot.content == 'empty' " src="css/images/empty.png">
+            <img class="square" ng-if="!spot.isCovered && spot.content == 'bomb' " src="css/images/trump.jpg">
+            <img class="square" ng-if="!spot.isCovered && spot.content == 1" src="css/images/number-1.png">
+            <img class="square" ng-if="!spot.isCovered && spot.content == 2" src="css/images/number-2.png">
+            <img class="square" ng-if="!spot.isCovered && spot.content == 3" src="css/images/number-3.png">
+            <img class="square" ng-if="!spot.isCovered && spot.content == 4" src="css/images/number-4.png">
+            <img class="square" ng-if="!spot.isCovered && spot.content == 5" src="css/images/number-5.png">
+            <img class="square" ng-if="!spot.isCovered && spot.content == 6" src="css/images/number-6.png">
+            <img class="square" ng-if="!spot.isCovered && spot.content == 7" src="css/images/number-7.png">
+            <img class="square" ng-if="!spot.isCovered && spot.content == 8" src="css/images/number-8.png">
           </td>
         </tr>
       </table>

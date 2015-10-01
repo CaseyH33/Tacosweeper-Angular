@@ -1,5 +1,6 @@
 tacosweeper.controller('TacosweeperCtrl', function TacosweeperCtrl($scope) {
   $scope.tacofield = createTacofield();
+  $scope.emptySpots = [];
   $scope.uncoverSpot = function(spot) {
     spot.isCovered = false;
     if(hasWon($scope.tacofield)) {
@@ -15,15 +16,46 @@ tacosweeper.controller('TacosweeperCtrl', function TacosweeperCtrl($scope) {
         }
         $scope.isLostMessageVisible = true;
     } else if(spot.content == "empty") {
-      revealSurrounding($scope.tacofield, spot.coordinates[0], spot.coordinates[1]);
+        $scope.emptySpots = [];
+        var surroundingSpots = getSurroundingSpots($scope.tacofield, spot.coordinates[0], spot.coordinates[1]);
+        revealSurrounding(surroundingSpots);
+        var i = 0;
+        while(i < $scope.emptySpots.length) {
+          var currentSurroundingSpots = getSurroundingSpots($scope.tacofield, $scope.emptySpots[i].coordinates[0], $scope.emptySpots[i].coordinates[1]);
+          revealSurrounding(currentSurroundingSpots);
+          i++;
+        }
 
-      // var surroundingSpots = getSurroundingSpots($scope.tacofield, spot.coordinates[0], spot.coordinates[1]);
-      // surroundingSpots.forEach(function(showSpot) {
-      //   var row = showSpot.coordinates[0];
-      //   var col = showSpot.coordinates[1];
-      //   $scope.tacofield.rows[row].spots[col].isCovered = false;
+        // $scope.emptySpots.forEach(function(currentSpot) {
+        //   var currentSurroundingSpots = getSurroundingSpots($scope.tacofield, currentSpot.coordinates[0], spot.coordinates[1]);
+        //   revealSurrounding(currentSurroundingSpots);
+        // });
 
-      // });
+        // Currently works (first two lines reveal squares around empty, next four lines reveal more)
+        // var surroundingSpots = getSurroundingSpots($scope.tacofield, spot.coordinates[0], spot.coordinates[1]);
+        // revealSurrounding(surroundingSpots);
+
+        // surroundingSpots.forEach(function(currentSpot) {
+        //   if(currentSpot.content == "empty") {
+        //     var currentSurroundingSpots = getSurroundingSpots($scope.tacofield, currentSpot.coordinates[0], currentSpot.coordinates[1]);
+        //     revealSurrounding(currentSurroundingSpots);
+        //   currentSurroundingSpots.forEach(function(nextSpot) {
+        //     if(nextSpot.content=="empty"){
+        //       var nextSurroundingSpots = getSurroundingSpots($scope.tacofield, nextSpot.coordinates[0], nextSpot.coordinates[1]);
+        //       revealSurrounding(nextSurroundingSpots);
+        //     };
+        //   });
+        //   };
+        // });
+
+
+        // var surroundingSpots = getSurroundingSpots($scope.tacofield, spot.coordinates[0], spot.coordinates[1]);
+        // surroundingSpots.forEach(function(showSpot) {
+        //   var row = showSpot.coordinates[0];
+        //   var col = showSpot.coordinates[1];
+        //   $scope.tacofield.rows[row].spots[col].isCovered = false;
+
+        // });
     };
   };
 
@@ -35,17 +67,22 @@ tacosweeper.controller('TacosweeperCtrl', function TacosweeperCtrl($scope) {
     $scope.isWinMessageVisible = false;
     $scope.isLostMessageVisible = false;
     $scope.tacofield = createTacofield();
-
   }
 
-  function revealSurrounding(tacofield, row, column) {
-    var surroundingSpots = getSurroundingSpots(tacofield, row, column);
+  function revealSurrounding(surroundingSpots) {
     surroundingSpots.forEach(function(showSpot) {
+      if((showSpot.content=="empty") && (showSpot.isCovered == true)) {
+        $scope.emptySpots.push(showSpot);
+      }
       var row1 = showSpot.coordinates[0];
       var col1 = showSpot.coordinates[1];
       $scope.tacofield.rows[row1].spots[col1].isCovered = false;
+      // if(showSpot.content=="empty") {
+      //   $scope.emptySpots.push(showSpot);
+      // }
       // if(showSpot.content == "empty") {
-      //   revealSurrounding(tacofield, row1, col1);
+      //   var currentSurroundingSpots = getSurroundingSpots($scope.tacofield, showSpot.coordinates[0], showSpot.coordinates[1]);
+      //   revealSurrounding(currentSurroundingSpots);
       // };
     });
   }
