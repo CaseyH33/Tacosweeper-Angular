@@ -7,15 +7,6 @@
   padding: 0;
 }
 
-.bomb {
-  height: 24px;
-}
-
-.taco {
-  height: 24px;
-  width: 24px;
-}
-
 .square {
   height: 80px;
   width: 80px;
