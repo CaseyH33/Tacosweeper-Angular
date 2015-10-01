@@ -1,12 +1,14 @@
 tacosweeper.controller('TacosweeperCtrl', function TacosweeperCtrl($scope) {
   $scope.tacofield = createTacofield();
   $scope.emptySpots = [];
+
   $scope.uncoverSpot = function(spot) {
     spot.isCovered = false;
     if(hasWon($scope.tacofield)) {
       $scope.isWinMessageVisible = true;
       alert("You are a winner!");
     } else if(spot.content == "bomb") {
+      //If revealed spot is a bomb, reveal all other bombs
         for(var y = 0; y < 9; y++ ) {
           for(var x = 0; x < 9; x++) {
             if($scope.tacofield.rows[y].spots[x].content == "bomb") {
@@ -14,8 +16,11 @@ tacosweeper.controller('TacosweeperCtrl', function TacosweeperCtrl($scope) {
             }
           }
         }
+        //Display losing message
         $scope.isLostMessageVisible = true;
+
     } else if(spot.content == "empty") {
+      //Reveal all spots around the clicked cell until a bomb is touching the spot
         $scope.emptySpots = [];
         var surroundingSpots = getSurroundingSpots($scope.tacofield, spot.coordinates[0], spot.coordinates[1]);
         revealSurrounding(surroundingSpots);
@@ -25,50 +30,22 @@ tacosweeper.controller('TacosweeperCtrl', function TacosweeperCtrl($scope) {
           revealSurrounding(currentSurroundingSpots);
           i++;
         }
-
-        // $scope.emptySpots.forEach(function(currentSpot) {
-        //   var currentSurroundingSpots = getSurroundingSpots($scope.tacofield, currentSpot.coordinates[0], spot.coordinates[1]);
-        //   revealSurrounding(currentSurroundingSpots);
-        // });
-
-        // Currently works (first two lines reveal squares around empty, next four lines reveal more)
-        // var surroundingSpots = getSurroundingSpots($scope.tacofield, spot.coordinates[0], spot.coordinates[1]);
-        // revealSurrounding(surroundingSpots);
-
-        // surroundingSpots.forEach(function(currentSpot) {
-        //   if(currentSpot.content == "empty") {
-        //     var currentSurroundingSpots = getSurroundingSpots($scope.tacofield, currentSpot.coordinates[0], currentSpot.coordinates[1]);
-        //     revealSurrounding(currentSurroundingSpots);
-        //   currentSurroundingSpots.forEach(function(nextSpot) {
-        //     if(nextSpot.content=="empty"){
-        //       var nextSurroundingSpots = getSurroundingSpots($scope.tacofield, nextSpot.coordinates[0], nextSpot.coordinates[1]);
-        //       revealSurrounding(nextSurroundingSpots);
-        //     };
-        //   });
-        //   };
-        // });
-
-
-        // var surroundingSpots = getSurroundingSpots($scope.tacofield, spot.coordinates[0], spot.coordinates[1]);
-        // surroundingSpots.forEach(function(showSpot) {
-        //   var row = showSpot.coordinates[0];
-        //   var col = showSpot.coordinates[1];
-        //   $scope.tacofield.rows[row].spots[col].isCovered = false;
-
-        // });
     };
   };
 
+//Change flagged property to display flag image
   $scope.flag = function(spot) {
     spot.isFlagged = true;
   }
 
+//Create new new game by resetting the board
   $scope.newGame = function() {
     $scope.isWinMessageVisible = false;
     $scope.isLostMessageVisible = false;
     $scope.tacofield = createTacofield();
   }
 
+//Reveal the surrounding spots of an empty spot
   function revealSurrounding(surroundingSpots) {
     surroundingSpots.forEach(function(showSpot) {
       if((showSpot.content=="empty") && (showSpot.isCovered == true)) {
@@ -77,16 +54,10 @@ tacosweeper.controller('TacosweeperCtrl', function TacosweeperCtrl($scope) {
       var row1 = showSpot.coordinates[0];
       var col1 = showSpot.coordinates[1];
       $scope.tacofield.rows[row1].spots[col1].isCovered = false;
-      // if(showSpot.content=="empty") {
-      //   $scope.emptySpots.push(showSpot);
-      // }
-      // if(showSpot.content == "empty") {
-      //   var currentSurroundingSpots = getSurroundingSpots($scope.tacofield, showSpot.coordinates[0], showSpot.coordinates[1]);
-      //   revealSurrounding(currentSurroundingSpots);
-      // };
     });
   }
 
+//Create initial field
   function createTacofield() {
     var tacofield= {};
     tacofield.rows = [];
@@ -113,10 +84,12 @@ tacosweeper.controller('TacosweeperCtrl', function TacosweeperCtrl($scope) {
     return tacofield;
   };
 
+//Get properies of a certain spot
   function getSpot(tacofield, row, column) {
     return tacofield.rows[row].spots[column];
   };
 
+//Place a bomb in a random spot that doesn't already have a bomb
   function placeRandomBomb(tacofield) {
     var row = Math.round(Math.random() * 8);
     var column = Math.round(Math.random() * 8);
@@ -128,12 +101,14 @@ tacosweeper.controller('TacosweeperCtrl', function TacosweeperCtrl($scope) {
     }
   };
 
+//Place bombNum number of bombs
   function placeManyRandomBombs(tacofield, bombNum) {
     for(var i =0; i<bombNum; i++) {
       placeRandomBomb(tacofield);
     };
   };
 
+//Returns array of surrounding spots from an empty spot
   function getSurroundingSpots(tacofield, row, column) {
 
       var thisSpot = getSpot(tacofield, row, column);
@@ -191,6 +166,7 @@ tacosweeper.controller('TacosweeperCtrl', function TacosweeperCtrl($scope) {
       return surroundingSpots;
     };
 
+//Calculates number of bombs around a specific spot
   function calculateNumber(tacofield, row, column) {
     var thisSpot = getSpot(tacofield, row, column);
 
