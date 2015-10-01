@@ -9,6 +9,7 @@ tacosweeper.controller('TacosweeperCtrl', function TacosweeperCtrl($scope) {
     if(hasWon($scope.tacofield)) {
       $scope.isWinMessageVisible = true;
     } else if(spot.content == "bomb") {
+      spot.content = "clicked bomb";
       //If revealed spot is a bomb, reveal all other bombs
         for(var y = 0; y < $scope.rowNum; y++ ) {
           for(var x = 0; x < $scope.rowNum; x++) {
