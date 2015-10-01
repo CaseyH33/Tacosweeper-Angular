@@ -7,14 +7,17 @@
     <script src="controllers/TacosweeperController.js"></script>
     <script src="directives/myDirectives.js"></script>
     <link rel="stylesheet" href="css/styles.css">
+    <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css'>
   </head>
   <body>
     <div ng-controller="TacosweeperCtrl">
       <h3 ng-if="isWinMessageVisible">You Won!</h3>
+      <h3 ng-if="isLostMessageVisible">You've Lost!</h3>
+      <button class="btn btn-primary" ng-click="newGame()">Start New Game</button>
       <table border="1" class="tacofield">
         <tr ng-repeat="row in tacofield.rows">
           <td ng-repeat="spot in row.spots" ng-click="uncoverSpot(spot)" ng-right-click="flag(spot)">
-            <img class="taco" ng-if="spot.isFlagged" src="css/images/taco-art.png">
+            <img class="taco" ng-if="spot.isFlagged && spot.isCovered" src="css/images/taco-art.png">
             <img ng-if="spot.isCovered && !spot.isFlagged" src="css/images/covered.png">
             <img ng-if="!spot.isCovered  && spot.content == 'empty' " src="css/images/empty.png">
             <img class="bomb" ng-if="!spot.isCovered && spot.content == 'bomb' " src="css/images/trump.jpg">

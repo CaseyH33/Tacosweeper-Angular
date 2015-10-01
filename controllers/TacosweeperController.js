@@ -13,12 +13,19 @@ tacosweeper.controller('TacosweeperCtrl', function TacosweeperCtrl($scope) {
             }
           }
         }
-        alert("You lose!!!");
+        $scope.isLostMessageVisible = true;
     };
   };
 
   $scope.flag = function(spot) {
     spot.isFlagged = true;
+  }
+
+  $scope.newGame = function() {
+    $scope.isWinMessageVisible = false;
+    $scope.isLostMessageVisible = false;
+    $scope.tacofield = createTacofield();
+
   }
 
   function createTacofield() {
@@ -34,7 +41,7 @@ tacosweeper.controller('TacosweeperCtrl', function TacosweeperCtrl($scope) {
         var spot = {};
         spot.isCovered = true;
         spot.content = "empty";
-        spot.isFlagged = false; // new
+        spot.isFlagged = false;
         row.spots.push(spot);
       }
 
@@ -54,8 +61,11 @@ tacosweeper.controller('TacosweeperCtrl', function TacosweeperCtrl($scope) {
     var row = Math.round(Math.random() * 8);
     var column = Math.round(Math.random() * 8);
     var spot = getSpot(tacofield, row, column);
-    //Check if spot already is a bomb
+    if(spot.content== 'bomb') {
+      placeRandomBomb(tacofield)
+    } else {
     spot.content ="bomb";
+    }
   };
 
   function placeManyRandomBombs(tacofield, bombNum) {
