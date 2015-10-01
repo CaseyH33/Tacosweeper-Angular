@@ -14,6 +14,16 @@ tacosweeper.controller('TacosweeperCtrl', function TacosweeperCtrl($scope) {
           }
         }
         $scope.isLostMessageVisible = true;
+    } else if(spot.content == "empty") {
+      revealSurrounding($scope.tacofield, spot.coordinates[0], spot.coordinates[1]);
+
+      // var surroundingSpots = getSurroundingSpots($scope.tacofield, spot.coordinates[0], spot.coordinates[1]);
+      // surroundingSpots.forEach(function(showSpot) {
+      //   var row = showSpot.coordinates[0];
+      //   var col = showSpot.coordinates[1];
+      //   $scope.tacofield.rows[row].spots[col].isCovered = false;
+
+      // });
     };
   };
 
@@ -26,6 +36,18 @@ tacosweeper.controller('TacosweeperCtrl', function TacosweeperCtrl($scope) {
     $scope.isLostMessageVisible = false;
     $scope.tacofield = createTacofield();
 
+  }
+
+  function revealSurrounding(tacofield, row, column) {
+    var surroundingSpots = getSurroundingSpots(tacofield, row, column);
+    surroundingSpots.forEach(function(showSpot) {
+      var row1 = showSpot.coordinates[0];
+      var col1 = showSpot.coordinates[1];
+      $scope.tacofield.rows[row1].spots[col1].isCovered = false;
+      // if(showSpot.content == "empty") {
+      //   revealSurrounding(tacofield, row1, col1);
+      // };
+    });
   }
 
   function createTacofield() {
@@ -42,6 +64,7 @@ tacosweeper.controller('TacosweeperCtrl', function TacosweeperCtrl($scope) {
         spot.isCovered = true;
         spot.content = "empty";
         spot.isFlagged = false;
+        spot.coordinates = [i,j];
         row.spots.push(spot);
       }
 
@@ -73,6 +96,63 @@ tacosweeper.controller('TacosweeperCtrl', function TacosweeperCtrl($scope) {
       placeRandomBomb(tacofield);
     };
   };
+
+  function getSurroundingSpots(tacofield, row, column) {
+
+      var thisSpot = getSpot(tacofield, row, column);
+
+      var surroundingSpots = [];
+
+      //check row above if this is not the first row
+      if(row > 0) {
+        //check column to the left if this is not the first column
+        if(column > 0) {
+          //get the spot above and to the left
+          surroundingSpots.push(getSpot(tacofield, row - 1, column - 1));
+        }
+
+        //get the spot right above
+        surroundingSpots.push(getSpot(tacofield, row -1, column));
+
+        //check column to the right if this is not the last column
+        if(column < 8) {
+          //get the spot above and to the right
+          surroundingSpots.push(getSpot(tacofield, row - 1, column + 1));
+        }
+
+      }
+
+      // check column to the left if this is not the first column
+      if(column > 0) {
+          // get the spot to the left
+          surroundingSpots.push(getSpot(tacofield, row, column - 1));
+      }
+
+      if (column < 8 ) {
+        // get the spot to the right
+        surroundingSpots.push(getSpot(tacofield, row, column +1));
+      }
+
+      // check row below if it is not the last row
+      if (row < 8 ) {
+       // check column to the left if this is not the first column
+        if (column > 0) {
+          // get the spot to the left
+          surroundingSpots.push(getSpot(tacofield, row +1, column -1));
+        }
+
+       // get the spot right below
+       surroundingSpots.push(getSpot(tacofield, row +1, column));
+
+       // check column to the right if it is not the last column
+       if (column < 8 ) {
+       // get the spot below and to the right
+        surroundingSpots.push(getSpot(tacofield, row +1, column +1));
+        }
+      }
+
+      return surroundingSpots;
+    };
 
   function calculateNumber(tacofield, row, column) {
     var thisSpot = getSpot(tacofield, row, column);
