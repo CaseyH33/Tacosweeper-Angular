@@ -13,9 +13,13 @@ tacosweeper.controller('TacosweeperCtrl', function TacosweeperCtrl($scope) {
             }
           }
         }
-        alert("You've lost!");
+        alert("You lose!!!");
     };
   };
+
+  $scope.flag = function(spot) {
+    spot.isFlagged = true;
+  }
 
   function createTacofield() {
     var tacofield= {};
@@ -29,7 +33,8 @@ tacosweeper.controller('TacosweeperCtrl', function TacosweeperCtrl($scope) {
       for(var j=0; j<9; j++) {
         var spot = {};
         spot.isCovered = true;
-        spot.content = "empty"; // new
+        spot.content = "empty";
+        spot.isFlagged = false; // new
         row.spots.push(spot);
       }
 
